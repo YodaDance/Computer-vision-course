@@ -9,24 +9,19 @@ def find_blue_pixels_straight(frame):
     # assigning more bit to a pixel for comparison
     work_frame = np.uint16(frame.copy())
     # making a binary frame
-    #blue pixels
-    work_frame[~((work_frame[:, :, 0] > work_frame[:, :, 1] + 70) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 70))] = (0, 0, 0)
-    # others as black
-    work_frame[((work_frame[:, :, 0] > work_frame[:, :, 1] + 70) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 70))] = (255, 255, 255)
+    work_frame[~((work_frame[:, :, 0] > work_frame[:, :, 1] + 50) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 50))] = (0, 0, 0)
+    work_frame[((work_frame[:, :, 0] > work_frame[:, :, 1] + 50) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 50))] = (255, 255, 255)
     # turn it back ot uint8
-    return np.uint8(work_frame) 
+    return np.uint8(work_frame)   
 
 # not successful one
 # def find_blue_pixels_hsv(frame):
 #     work_frame = cv.cvtColor(frame.copy(), cv.COLOR_BGR2HSV)
 #     h, s, v = cv.split(work_frame)
-#     s.fill(255)
-#     v.fill(255)
-#     hsv_image = cv.merge([h, s, v])
-#     lower = np.array([117, 255, 255], dtype = np.uint8)
-#     upper = np.array([127, 255, 255], dtype = np.uint8)
+#     h[(h >= 110) & (h <= 130)] = 0
+#     h[~(h >= 110) & (h <= 130)] = 255
     
-#     return cv.inRange(hsv_image, lower, upper)
+#     return h
 
 # main part
 cap = cv.VideoCapture(0)
@@ -34,6 +29,8 @@ cap = cv.VideoCapture(0)
 if not cap.isOpened():
     print("Cannot open camera")
     exit()
+
+kernel = np.ones((4,4),np.uint8)
 
 while True:
     # Capture frame-by-frame
@@ -48,7 +45,7 @@ while True:
     work_frame = find_blue_pixels_straight(frame)
     #work_frame2  = find_blue_pixels_hsv(frame)
     contour_frame = cv.cvtColor(work_frame.copy(), cv.COLOR_BGR2GRAY)
-    #contour_frame = cv.equalizeHist(contour_frame)
+    contour_frame = cv.dilate(contour_frame, kernel, iterations = 1)
     # to stabilize an image - making some blur
     # from here: https://stackoverflow.com/questions/71739517/detect-squares-paintings-in-images-and-draw-contour-around-them-using-python
     contour_frame = cv.GaussianBlur(contour_frame, (17,17), 0)
