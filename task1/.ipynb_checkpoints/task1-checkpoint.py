@@ -9,8 +9,8 @@ def find_blue_pixels_straight(frame):
     # assigning more bit to a pixel for comparison
     work_frame = np.uint16(frame.copy())
     # making a binary frame
-    work_frame[~((work_frame[:, :, 0] > work_frame[:, :, 1] + 50) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 50))] = (0, 0, 0)
-    work_frame[((work_frame[:, :, 0] > work_frame[:, :, 1] + 50) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 50))] = (255, 255, 255)
+    work_frame[~((work_frame[:, :, 0] > work_frame[:, :, 1] + 70) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 70))] = (0, 0, 0)
+    work_frame[((work_frame[:, :, 0] > work_frame[:, :, 1] + 70) & (work_frame[:, :, 0] > work_frame[:, :, 2] + 70))] = (255, 255, 255)
     # turn it back ot uint8
     return np.uint8(work_frame)   
 
