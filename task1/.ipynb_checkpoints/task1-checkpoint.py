@@ -45,7 +45,8 @@ while True:
     work_frame = find_blue_pixels_straight(frame)
     #work_frame2  = find_blue_pixels_hsv(frame)
     contour_frame = cv.cvtColor(work_frame.copy(), cv.COLOR_BGR2GRAY)
-    contour_frame = cv.dilate(contour_frame, kernel, iterations = 1)
+    #contour_frame = cv.dilate(contour_frame, kernel, iterations = 1)
+    contour_frame = cv.morphologyEx(contour_frame, cv.MORPH_OPEN, kernel)
     # to stabilize an image - making some blur
     # from here: https://stackoverflow.com/questions/71739517/detect-squares-paintings-in-images-and-draw-contour-around-them-using-python
     contour_frame = cv.GaussianBlur(contour_frame, (17,17), 0)
